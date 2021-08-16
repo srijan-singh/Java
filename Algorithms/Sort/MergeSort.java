@@ -4,11 +4,8 @@ import java.util.Scanner;
 
 public class MergeSort {
 
-    // To print sorted array
-    public static void print(int arr[], int length)
+    public static void display(int arr[], int length)
     {
-        System.out.print("Sorted Array: ");
-
         for(int i=0; i<length; i++)
         {
             System.out.print(arr[i] + " ");
@@ -17,52 +14,51 @@ public class MergeSort {
         System.out.println("");
     }
 
-    // Insertion Sort
-    public static void insertionSort(int arr[], int low, int high)
+    public static void merge(int arr[], int start, int mid, int end)
     {
-        for(int i=high; (i-1)>=low; i--)
+        int length = end - start + 1;
+
+        int temp[] = new int[length];
+
+        int index = 0, left = start, right = mid+1;
+
+        while(left<=mid && right<=end)
         {
-            if( arr[i] < arr[i-1] )
+            if(arr[left] <= arr[right])
             {
-                int temp = arr[i];
-                arr[i] = arr[i-1];
-                arr[i-1] = temp;
+                temp[index++] = arr[left++];
+            }
+            else
+            {
+                temp[index++] = arr[right++];
             }
         }
-    }
 
-    // Merge Sort
-    public static int mergeSort(int arr[], int length, int index) []
-    {
-        if (length <= index)
+        while(left<=mid)
         {
-            return arr;
-        }
-  
-        // The range is defined by index.
-  
-        /*
-            If array has 8 elements:  ********
-            It will sort array until it's less than length of array.
-            1st call  2*1 elements max: ** ** ** ** // Called from Main Function
-            2nd call  2*2 elements max: **** ****
-            3rd call  2*3 elements max: ********
-            Returns Array
-        */
-
-        // The range is defined by index.
-        for(int i=0; (i+index)<length; i+=index)
-        {
-            insertionSort(arr, i, i+index);
+            temp[index++] = arr[left++];
         }
 
-        return mergeSort(arr, length, index*2);
+        while(right<=end)
+        {
+            temp[index++] = arr[right++];
+        }
+
+        for(int i=start; i<=end; i++)
+        {
+            arr[i] = temp[i-start];
+        }
     }
 
-    
-    public static int mergeSort(int arr[], int length) []
+    public static void mergeSort(int arr[], int start, int end)
     {
-        return mergeSort(arr, length, 2); // Will start from sub array of 2 element
+        if(start<end)
+        {
+            int mid = (start+end)/2;
+            mergeSort(arr, start, mid);
+            mergeSort(arr, mid+1, end);
+            merge(arr, start, mid, end);
+        }
     }
 
     public static void main(String arg[])
@@ -75,13 +71,17 @@ public class MergeSort {
 
         for(int i=0; i<length; i++)
         {
-            System.out.print("Enter element "+(i+1)+" : ");
+            System.out.print("Enter Element "+(i+1)+" : ");
             arr[i] = scan.nextInt();
         }
         scan.close();
 
-        mergeSort(arr, length);
+        System.out.print("Given Array: ");
+        display(arr, length);
 
-        print(arr, length);
+        mergeSort(arr, 0, length-1);
+
+        System.out.print("Sorted Array: ");
+        display(arr, length);
     }
 }
