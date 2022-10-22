@@ -1,3 +1,4 @@
+//Primitive Data Types
 class DataType
 {
     public static void main(String[] args) {
